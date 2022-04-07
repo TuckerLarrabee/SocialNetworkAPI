@@ -1,6 +1,7 @@
 const { User } = require('../models');
 
 const userController = {
+    ///api/users
     // GET all users
     getAllUsers(req,res) {
         User.find({})
@@ -67,15 +68,50 @@ const userController = {
         User.findOneAndDelete({ _id: params.id})
         .then(dbUserData => {
             if (!dbUserData) {
-                res.status(404).json({ message: 'No pizza found with this id!'});
+                res.status(404).json({ message: 'No user found with this id!'});
                 return;
             }
             res.json(dbUserData)
         })
         .catch(err => res.status(400).json(err))
-    }
+    },
 
     //*BONUS* Remove a user's associated thoughts when deleted
+
+    ///api/users/:userId/friends/:friendId
+    // POST to add a new friend to a user's friend list
+    addFriend({params}, res) {
+        User.findOneAndUpdate(
+            { _id: params.userId},
+            { $push: { friends: { friendId: params.friendId}}},
+            { new: true, runValidators: true}
+        )
+        .then(dbUserData => {
+            if(!dbUserData) {
+                res.status(404).json({ message: 'no user found with this id!'});
+                return;
+            }
+            res.json(dbUserData);
+        })
+        .catch(err => res.status(400).json(err));
+    },
+
+    // DELETE to remove a friend from a user's friend list
+    removeFriend({params}, res) {
+        User.findOneAndUpdate(
+            { _id: params.userId},
+            { $pull: { friends: { friendId: params.friendId}}},
+            { new: true, runValidators: true}
+        )
+        .then(dbUserData => {
+            if(!dbUserData) {
+                res.status(404).json({ message: 'no user found with this id!'});
+                return;
+            }
+            res.json(dbUserData);
+        })
+        .catch(err => res.status(400).json(err));
+    }
 };
 
 module.exports = userController;
