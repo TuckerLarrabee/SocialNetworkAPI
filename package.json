@@ -20,7 +20,8 @@
   "homepage": "https://github.com/TuckerLarrabee/SocialNetworkAPI#readme",
   "dependencies": {
     "express": "^4.17.3",
-    "mongoose": "^6.2.10"
+    "mongoose": "^6.2.10",
+    "validator": "^13.7.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"
