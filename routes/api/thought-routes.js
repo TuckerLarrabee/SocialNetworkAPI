@@ -27,6 +27,10 @@ router
     .route('/:thoughtId/reactions')
     .post(addReaction);
 
+router
+    .route('/:thoughtId/reactions/:reactionId')
+    .post(removeReaction);
+
 
 
 
